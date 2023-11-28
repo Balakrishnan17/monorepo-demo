@@ -1,0 +1,73 @@
+{
+  "name": "admin-fe",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/admin-fe/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "compiler": "babel",
+        "outputPath": "dist/apps/admin-fe",
+        "index": "apps/admin-fe/src/index.html",
+        "baseHref": "/",
+        "main": "apps/admin-fe/src/main.tsx",
+        "tsConfig": "apps/admin-fe/tsconfig.app.json",
+        "assets": ["apps/admin-fe/src/favicon.ico", "apps/admin-fe/src/assets"],
+        "styles": ["apps/admin-fe/src/styles.scss"],
+        "scripts": [],
+        "isolatedConfig": true,
+        "webpackConfig": "apps/admin-fe/webpack.config.js"
+      },
+      "configurations": {
+        "development": {
+          "extractLicenses": false,
+          "optimization": false,
+          "sourceMap": true,
+          "vendorChunk": true
+        },
+        "production": {
+          "fileReplacements": [
+            {
+              "replace": "apps/admin-fe/src/environments/environment.ts",
+              "with": "apps/admin-fe/src/environments/environment.prod.ts"
+            }
+          ],
+          "optimization": true,
+          "outputHashing": "all",
+          "sourceMap": false,
+          "namedChunks": false,
+          "extractLicenses": true,
+          "vendorChunk": false
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nx/webpack:dev-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "admin-fe:build",
+        "hmr": true
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "admin-fe:build:development"
+        },
+        "production": {
+          "buildTarget": "admin-fe:build:production",
+          "hmr": false
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/admin-fe/**/*.{ts,tsx,js,jsx}"]
+      }
+    }
+  },
+  "tags": []
+}
